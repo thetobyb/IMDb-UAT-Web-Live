@@ -1,7 +1,7 @@
 {
   "name": "uat-web-live",
   "version": "1.0.0",
-  "description": "Demonstrating selenium UAT for a live web-site",
+  "description": "Demonstrating selenium UAT for a live web-site, specifically IMDb. Credits to Floz!",
   "scripts": {
     "test": "cucumber-js"
   },
