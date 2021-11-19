@@ -13,7 +13,7 @@
 const {After, Before, Given, Then, When} = require('@cucumber/cucumber');
 const assert = require('assert');
 const path = require('path');
-const timeout = 10000;
+ const timeout = 10000;
 
 Before({timeout}, async function() {
     this.browserBuild();
@@ -25,42 +25,44 @@ After({timeout}, async function() {
 
 Given('the {word} page', {timeout}, async function(page) {
     const pages = {
-        'news': 'https://www.bbc.co.uk/news',
-        'weather': 'https://www.bbc.co.uk/weather'
+        'imdb': 'https://www.imdb.com/',
     }
 
     assert((pages[page] != null), 'Page not supported!');
     await this.browserNavigate(pages[page]);
 });
 
-When('the {string} location is searched for', async function(location) {
-    this.text = location;
+When('the {string} film is searched for', async function(film) {
+    this.text = film;
 
-    const searchInput = await this.getElement('ls-c-search__input-label');
-    const searchSubmit = await this.getElementByCss('[type="submit"].ls-c-search__submit');
+    const searchInput = await this.getElement('suggestion-search');
+    const searchSubmit = await this.getElementByCss('[type="submit"]#suggestion-search-button');
 
-    await searchInput.sendKeys(location);
+    await searchInput.sendKeys(film);
     await searchSubmit.click();
-    await this.waitForElementByCss('.wr-c-observations__heading', timeout);
+    
 });
 
 Then('the {string} element should be {word}', async function(name, state) {
     const ids = {
-        'location heading': 'wr-location-name-id',
-        'search input': 'ls-c-search__input-label',
-        'search submit': '[type="submit"].ls-c-search__submit'
+        'film heading': '.findSearchTerm',
+        'search input': 'suggestion-search',
+        'search submit': '[type="submit"]#suggestion-search-button'
     };
 
     const selectors = {
-        'location heading': 'getElement',
+
+        'film heading': 'getElementByCss',
         'search input': 'getElement',
         'search submit': 'getElementByCss'
+
     };
 
     const tags = {
-        'location heading': 'h1',
+
+        'film heading': 'span',
         'search input': 'input',
-        'search submit': 'input'
+        'search submit': 'button'
     };
 
     const id = ids[name];
@@ -81,7 +83,7 @@ Then('the {string} element should be {word}', async function(name, state) {
             if (state == 'matching') {
                 const actualText = await element.getText();
                 console.log('ACTUAL TEXT: '+actualText+'!');
-                assert((actualText == this.text), 'Element text does not match!');
+                assert((actualText.slice(1,-1) == this.text), 'Element text does not match!');
             }
             
             break;

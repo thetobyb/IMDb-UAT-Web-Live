@@ -81,7 +81,7 @@ class CustomWorld {
      */
     async waitForElementByCss(css, timeout) {
         const selector = webdriver.By.css(css);
-        await this.headless.wait(webdriver.until.elementLocated(selector), timeout, 2000);
+        await this.headless.wait(webdriver.until.elementLocated(selector), timeout, 10000);
     }
 }
 
